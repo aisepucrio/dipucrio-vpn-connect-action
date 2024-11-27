@@ -1,5 +1,5 @@
 name: "OpenVPN Connect - Enhanced"
-description: "Connect To OpenVPN Server"
+description: "Connect to an OpenVPN Server"
 branding:
   icon: "lock"
   color: "yellow"
