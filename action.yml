@@ -1,8 +1,8 @@
-name: "OpenVPN-Connect"
-description: "connect to OpenVPN server"
+name: "OpenVPN Connect"
+description: "Connect To OpenVPN Server"
 branding:
   icon: "lock"
-  color: "green"
+  color: "yellow"
 inputs:
   config_file:
     description: "Location of OpenVPN client config file"
@@ -12,6 +12,9 @@ inputs:
     required: false
   password:
     description: "Password"
+    required: false
+  private_key_password:
+    description: "Private Key Password"
     required: false
   tls_auth_key:
     description: "Pre-shared group key for TLS Auth"
