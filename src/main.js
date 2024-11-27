@@ -7,6 +7,7 @@ const run = (callback) => {
   const configFile = core.getInput("config_file", { required: true });
   const username = core.getInput("username");
   const password = core.getInput("password");
+  const privateKeyPassword = core.getInput("private_key_password");
   const clientKey = core.getInput("client_key");
   const tlsAuthKey = core.getInput("tls_auth_key");
   const tlsCryptKey = core.getInput("tls_crypt_key");
@@ -25,6 +26,10 @@ const run = (callback) => {
   if (username && password) {
     fs.appendFileSync(configFile, "auth-user-pass up.txt\n");
     fs.writeFileSync("up.txt", [username, password].join("\n"), { mode: 0o600 });
+  }
+
+  if (privateKeyPassword) {
+    fs.writeFileSync("pkp.txt", privateKeyPassword, { mode: 0o600 });
   }
 
   // client certificate auth
@@ -60,7 +65,7 @@ const run = (callback) => {
   const tail = new Tail("openvpn.log");
 
   try {
-    exec(`sudo openvpn --config ${configFile} --daemon --log openvpn.log --writepid openvpn.pid`);
+    exec(`sudo openvpn --config ${configFile} ${privateKeyPassword ? "--askpass pkp.txt" : ""} --daemon --log openvpn.log --writepid openvpn.pid`);
   } catch (error) {
     core.error(fs.readFileSync("openvpn.log", "utf8"));
     tail.unwatch();
