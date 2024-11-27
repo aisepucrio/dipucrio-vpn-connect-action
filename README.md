@@ -52,7 +52,7 @@ You can determine which by checking the value of your key and looking in the hea
           sudo apt update
           sudo apt install -y openvpn openvpn-systemd-resolved
       - name: Connect to VPN
-        uses: "kota65535/github-openvpn-connect-action@v2"
+        uses: "SoroushTaheri/openvpn-connect-action@v0.1.0"
         with:
           config_file: .github/workflows/client.ovpn
           username: ${{ secrets.OVPN_USERNAME }}
