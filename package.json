@@ -1,7 +1,7 @@
 {
-  "name": "github-openvpn-connect-action",
-  "version": "3.1.0",
-  "description": "GitHub Action for connecting to OpenVPN server",
+  "name": "github-openvpn-dipucrio-action",
+  "version": "1.1.0",
+  "description": "GitHub Action for connecting to DI PUC-Rio OpenVPN server",
   "keywords": [
     "github",
     "actions"

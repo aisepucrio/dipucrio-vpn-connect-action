@@ -1,5 +1,5 @@
-name: "OpenVPN Connect - Enhanced"
-description: "Connect to an OpenVPN Server"
+name: "OpenVPN Connect for DI PUC-Rio servers"
+description: "Connect to DI PUC-Rio servers"
 branding:
   icon: "lock"
   color: "yellow"
@@ -9,24 +9,15 @@ inputs:
     required: true
   username:
     description: "Username"
-    required: false
+    required: true
   password:
     description: "Password"
-    required: false
+    required: true
   private_key_password:
     description: "Private Key Password"
-    required: false
+    required: true
   tls_auth_key:
     description: "Pre-shared group key for TLS Auth"
-    required: false
-  tls_crypt_key:
-    description: "Pre-shared group key for TLS Crypt"
-    required: false
-  tls_crypt_v2_key:
-    description: "Per-client key for TLS Crypt V2"
-    required: false
-  client_key:
-    description: "Local peer's private key"
     required: false
   echo_config:
     description: "Print the OpenVPN configuration file"
