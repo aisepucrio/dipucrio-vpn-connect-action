@@ -25191,11 +25191,10 @@ const run = (callback) => {
   const configFile = core.getInput("config_file", { required: true });
   const username = core.getInput("username");
   const password = core.getInput("password");
-  const clientKey = core.getInput("client_key");
-  const tlsAuthKey = core.getInput("tls_auth_key");
-  const tlsCryptKey = core.getInput("tls_crypt_key");
-  const tlsCryptV2Key = core.getInput("tls_crypt_v2_key");
+  const privateKeyPassword = core.getInput("private_key_password");
   const echoConfig = core.getInput("echo_config");
+
+  core.info("Starting OpenVPN Connect for DI PUC-Rio Action");
 
   if (!fs.existsSync(configFile)) {
     throw new Error(`config file '${configFile}' not found`);
@@ -25211,25 +25210,8 @@ const run = (callback) => {
     fs.writeFileSync("up.txt", [username, password].join("\n"), { mode: 0o600 });
   }
 
-  // client certificate auth
-  if (clientKey) {
-    fs.appendFileSync(configFile, "key client.key\n");
-    fs.writeFileSync("client.key", clientKey, { mode: 0o600 });
-  }
-
-  if (tlsAuthKey) {
-    fs.appendFileSync(configFile, "tls-auth ta.key 1\n");
-    fs.writeFileSync("ta.key", tlsAuthKey, { mode: 0o600 });
-  }
-
-  if (tlsCryptKey) {
-    fs.appendFileSync(configFile, "tls-crypt tc.key 1\n");
-    fs.writeFileSync("tc.key", tlsCryptKey, { mode: 0o600 });
-  }
-
-  if (tlsCryptV2Key) {
-    fs.appendFileSync(configFile, "tls-crypt-v2 tcv2.key 1\n");
-    fs.writeFileSync("tcv2.key", tlsCryptV2Key, { mode: 0o600 });
+  if (privateKeyPassword) {
+    fs.writeFileSync("pkp.txt", privateKeyPassword, { mode: 0o600 });
   }
 
   if (echoConfig === "true") {
@@ -25244,7 +25226,7 @@ const run = (callback) => {
   const tail = new Tail("openvpn.log");
 
   try {
-    exec(`sudo openvpn --config ${configFile} --daemon --log openvpn.log --writepid openvpn.pid`);
+    exec(`sudo openvpn --config ${configFile} --askpass pkp.txt --daemon --log openvpn.log --writepid openvpn.pid`);
   } catch (error) {
     core.error(fs.readFileSync("openvpn.log", "utf8"));
     tail.unwatch();
@@ -25265,7 +25247,7 @@ const run = (callback) => {
   const timer = setTimeout(() => {
     core.setFailed("VPN connection failed.");
     tail.unwatch();
-  }, 15000);
+  }, 60000);
 };
 
 module.exports = run;
