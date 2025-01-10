@@ -10,6 +10,8 @@ const run = (callback) => {
   const privateKeyPassword = core.getInput("private_key_password");
   const echoConfig = core.getInput("echo_config");
 
+  core.info("Starting OpenVPN Connect for DI PUC-Rio Action");
+
   if (!fs.existsSync(configFile)) {
     throw new Error(`config file '${configFile}' not found`);
   }

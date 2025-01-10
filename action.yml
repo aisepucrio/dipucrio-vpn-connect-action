@@ -2,7 +2,7 @@ name: "OpenVPN Connect for DI PUC-Rio servers"
 description: "Connect to DI PUC-Rio servers"
 branding:
   icon: "lock"
-  color: "yellow"
+  color: "blue"
 inputs:
   config_file:
     description: "Location of OpenVPN client config file"
@@ -16,9 +16,6 @@ inputs:
   private_key_password:
     description: "Private Key Password"
     required: true
-  tls_auth_key:
-    description: "Pre-shared group key for TLS Auth"
-    required: false
   echo_config:
     description: "Print the OpenVPN configuration file"
     required: false
