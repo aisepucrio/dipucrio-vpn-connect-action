@@ -1,14 +1,10 @@
 name: Test
-
 on:
   push:
     branches:
       - main
     paths-ignore:
       - README.md
-  pull_request:
-
-
 jobs:
   show-context:
     runs-on: ubuntu-latest
@@ -17,7 +13,6 @@ jobs:
         run: echo $JSON
         env:
           JSON: ${{ toJSON(github) }}
-  
   test:
     runs-on: ubuntu-latest
     name: Typical Usage of OpenVPN
@@ -31,10 +26,12 @@ jobs:
       - name: Connect to VPN
         uses: "./"
         with:
-          config_file: .github/workflows/client.ovpn
           username: ${{ secrets.OVPN_USERNAME }}
           password: ${{ secrets.OVPN_PASSWORD }}
-          client_key: ${{ secrets.OVPN_CLIENT_KEY }}
-          tls_auth_key: ${{ secrets.OVPN_TLS_AUTH_KEY }}
+          private_key_password: ${{ secrets.OVPN_PK_PASSWORD }}
+          private_key_filename: ${{ secrets.OVPN_PK_FILENAME }}
+        env:
+          CONFIG_FILE: ${{ secrets.OVPN_CONFIG_FILE }}
+          PRIVATE_KEY_FILE: ${{ secrets.OVPN_PRIVATE_KEY_FILE }}
       - name: Check if connected
         run: curl -v ${{ secrets.TARGET_URL }}

@@ -4,22 +4,29 @@ branding:
   icon: "lock"
   color: "blue"
 inputs:
-  config_file:
-    description: "Location of OpenVPN client config file"
-    required: true
   username:
     description: "Username"
     required: true
   password:
     description: "Password"
     required: true
+  private_key_filename:
+    description: "Private Key filename"
+    required: true
   private_key_password:
-    description: "Private Key Password"
+    description: "Private Key password"
     required: true
   echo_config:
     description: "Print the OpenVPN configuration file"
     required: false
     default: "true"
+env:
+  CONFIG_FILE:
+    description: "OpenVPN client config base64"
+    required: true
+  PRIVATE_KEY_FILE:
+    description: "Private Key file base64"
+    required: true
 runs:
   using: "node20"
   main: "dist/index.js"
