@@ -1,21 +1,21 @@
 {
-  "name": "github-openvpn-connect-action",
-  "version": "1.2.0",
+  "name": "dipucrio-vpn-connect-action",
+  "version": "1.4.0",
   "description": "GitHub Action for connecting to DI PUC-Rio OpenVPN server",
   "keywords": [
     "github",
     "actions"
   ],
-  "homepage": "https://github.com/kota65535/github-openvpn-connect-action#readme",
+  "homepage": "https://github.com/aisepucrio/dipucrio-vpn-connect-action#readme",
   "bugs": {
-    "url": "https://github.com/kota65535/github-openvpn-connect-action/issues"
+    "url": "https://github.com/aisepucrio/dipucrio-vpn-connect-action/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kota65535/github-openvpn-connect-action.git"
+    "url": "git+https://github.com/aisepucrio/dipucrio-vpn-connect-action.git"
   },
   "license": "MIT",
-  "author": "Tomohiko Ozawa <kota65535@gmail.com>",
+  "author": "AISE PUC-Rio <aise@inf.puc-rio.br>",
   "main": "src/index.js",
   "scripts": {
     "build": "ncc build src/index.js",

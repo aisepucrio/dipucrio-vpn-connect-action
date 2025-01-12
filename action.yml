@@ -19,7 +19,7 @@ inputs:
   echo_config:
     description: "Print the OpenVPN configuration file"
     required: false
-    default: "true"
+    default: "false"
 env:
   CONFIG_FILE:
     description: "OpenVPN client config base64"

@@ -33,5 +33,3 @@ jobs:
         env:
           CONFIG_FILE: ${{ secrets.OVPN_CONFIG_FILE }}
           PRIVATE_KEY_FILE: ${{ secrets.OVPN_PRIVATE_KEY_FILE }}
-      - name: Check if connected
-        run: curl -v ${{ secrets.TARGET_URL }}
