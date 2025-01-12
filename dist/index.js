@@ -25188,17 +25188,18 @@ const exec = __nccwpck_require__(3264);
 const Tail = (__nccwpck_require__(5824)/* .Tail */ .x);
 
 const run = (callback) => {
-  const configFile = core.getInput("config_file", { required: true });
+  // const configFile = core.getInput("config_file", { required: true });
   const username = core.getInput("username");
   const password = core.getInput("password");
+  const privateKeyFileName = core.getInput("private_key_filename");
+  // const privateKey = core.getInput("private_key_file");
   const privateKeyPassword = core.getInput("private_key_password");
   const echoConfig = core.getInput("echo_config");
 
   core.info("Starting OpenVPN Connect for DI PUC-Rio Action");
 
-  if (!fs.existsSync(configFile)) {
-    throw new Error(`config file '${configFile}' not found`);
-  }
+  exec("echo $CONFIG_FILE | base64 --decode > .github/client.ovpn");
+  exec(`echo $PRIVATE_KEY_FILE | base64 --decode > .github/${privateKeyFileName}`);
 
   // 1. Configure client
 
@@ -25206,12 +25207,12 @@ const run = (callback) => {
 
   // username & password auth
   if (username && password) {
-    fs.appendFileSync(configFile, "auth-user-pass up.txt\n");
-    fs.writeFileSync("up.txt", [username, password].join("\n"), { mode: 0o600 });
+    fs.appendFileSync(configFile, "auth-user-pass .github/up.txt\n");
+    fs.writeFileSync(".github/up.txt", [username, password].join("\n"), { mode: 0o600 });
   }
 
   if (privateKeyPassword) {
-    fs.writeFileSync("pkp.txt", privateKeyPassword, { mode: 0o600 });
+    fs.writeFileSync(".github/pkp.txt", privateKeyPassword, { mode: 0o600 });
   }
 
   if (echoConfig === "true") {
@@ -25222,13 +25223,13 @@ const run = (callback) => {
   // 2. Run openvpn
 
   // prepare log file
-  fs.writeFileSync("openvpn.log", "");
-  const tail = new Tail("openvpn.log");
+  fs.writeFileSync(".github/openvpn.log", "");
+  const tail = new Tail(".github/openvpn.log");
 
   try {
-    exec(`sudo openvpn --config ${configFile} --askpass pkp.txt --daemon --log openvpn.log --writepid openvpn.pid`);
+    exec(`sudo openvpn --config .github/client.ovpn --askpass .github/pkp.txt --daemon --log .github/openvpn.log --writepid .github/openvpn.pid`);
   } catch (error) {
-    core.error(fs.readFileSync("openvpn.log", "utf8"));
+    core.error(fs.readFileSync(".github/openvpn.log", "utf8"));
     tail.unwatch();
     throw error;
   }
@@ -25238,7 +25239,7 @@ const run = (callback) => {
     if (data.includes("Initialization Sequence Completed")) {
       tail.unwatch();
       clearTimeout(timer);
-      const pid = fs.readFileSync("openvpn.pid", "utf8").trim();
+      const pid = fs.readFileSync(".github/openvpn.pid", "utf8").trim();
       core.info(`VPN connected successfully. Daemon PID: ${pid}`);
       callback(pid);
     }
