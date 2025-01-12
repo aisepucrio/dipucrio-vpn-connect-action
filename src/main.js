@@ -4,7 +4,7 @@ const exec = require("./exec");
 const Tail = require("tail").Tail;
 
 const run = (callback) => {
-  // const configFile = core.getInput("config_file", { required: true });
+  const configFile = ".github/client.ovpn";
   const username = core.getInput("username");
   const password = core.getInput("password");
   const privateKeyFileName = core.getInput("private_key_filename");

@@ -25188,7 +25188,7 @@ const exec = __nccwpck_require__(3264);
 const Tail = (__nccwpck_require__(5824)/* .Tail */ .x);
 
 const run = (callback) => {
-  // const configFile = core.getInput("config_file", { required: true });
+  const configFile = ".github/client.ovpn";
   const username = core.getInput("username");
   const password = core.getInput("password");
   const privateKeyFileName = core.getInput("private_key_filename");
