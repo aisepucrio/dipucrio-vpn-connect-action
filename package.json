@@ -1,6 +1,6 @@
 {
   "name": "dipucrio-vpn-connect-action",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "GitHub Action for connecting to DI PUC-Rio OpenVPN server",
   "keywords": [
     "github",
