@@ -1,5 +1,5 @@
 const fs = require("fs");
-const path = require("path");
+const process = require("node:process");
 const core = require("@actions/core");
 const exec = require("./exec");
 const Tail = require("tail").Tail;
@@ -24,7 +24,7 @@ const run = (callback) => {
 
   // username & password auth
   if (username && password) {
-    fs.appendFileSync(configFile, "auth-user-pass .github/up.txt\n");
+    fs.appendFileSync(configFile, "auth-user-pass up.txt\n");
     fs.writeFileSync(".github/up.txt", [username, password].join("\n"), { mode: 0o600 });
   }
 
@@ -43,10 +43,10 @@ const run = (callback) => {
   fs.writeFileSync(".github/openvpn.log", "");
   const tail = new Tail(".github/openvpn.log");
 
-  const workingDir = path.resolve(".github");
+  const workingDir = process.cwd();
 
   try {
-    exec(`sudo openvpn --cd ${workingDir} --config client.ovpn --askpass pkp.txt --daemon --log openvpn.log --verb 0 --writepid openvpn.pid`);
+    exec(`sudo openvpn --cd ${workingDir}/.github --config client.ovpn --askpass pkp.txt --daemon --log openvpn.log --verb 0 --writepid openvpn.pid`);
   } catch (error) {
     core.error(fs.readFileSync(".github/openvpn.log", "utf8"));
     tail.unwatch();
@@ -61,6 +61,7 @@ const run = (callback) => {
       fs.rmSync(".github/pkp.txt");
       fs.rmSync(".github/client.ovpn");
       fs.rmSync(".github/up.txt");
+      fs.rmSync(`.github/${privateKeyFileName}`);
       setTimeout(() => {
         const pid = fs.readFileSync(".github/openvpn.pid", "utf8").trim();
         core.info(`VPN connected successfully. Daemon PID: ${pid}`);

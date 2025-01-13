@@ -25398,7 +25398,7 @@ module.exports = exec;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const fs = __nccwpck_require__(7147);
-const path = __nccwpck_require__(1017);
+const process = __nccwpck_require__(7742);
 const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(3264);
 const Tail = (__nccwpck_require__(5824)/* .Tail */ .x);
@@ -25423,7 +25423,7 @@ const run = (callback) => {
 
   // username & password auth
   if (username && password) {
-    fs.appendFileSync(configFile, "auth-user-pass .github/up.txt\n");
+    fs.appendFileSync(configFile, "auth-user-pass up.txt\n");
     fs.writeFileSync(".github/up.txt", [username, password].join("\n"), { mode: 0o600 });
   }
 
@@ -25442,10 +25442,10 @@ const run = (callback) => {
   fs.writeFileSync(".github/openvpn.log", "");
   const tail = new Tail(".github/openvpn.log");
 
-  const workingDir = __nccwpck_require__.ab + ".github";
+  const workingDir = process.cwd();
 
   try {
-    exec(`sudo openvpn --cd ${workingDir} --config client.ovpn --askpass pkp.txt --daemon --log openvpn.log --verb 0 --writepid openvpn.pid`);
+    exec(`sudo openvpn --cd ${workingDir}/.github --config client.ovpn --askpass pkp.txt --daemon --log openvpn.log --verb 0 --writepid openvpn.pid`);
   } catch (error) {
     core.error(fs.readFileSync(".github/openvpn.log", "utf8"));
     tail.unwatch();
@@ -25612,6 +25612,14 @@ module.exports = require("net");
 
 "use strict";
 module.exports = require("node:events");
+
+/***/ }),
+
+/***/ 7742:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:process");
 
 /***/ }),
 
