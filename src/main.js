@@ -43,7 +43,7 @@ const run = (callback) => {
   const tail = new Tail(".github/openvpn.log");
 
   try {
-    exec(`sudo openvpn --config .github/client.ovpn --askpass .github/pkp.txt --daemon --log .github/openvpn.log --writepid .github/openvpn.pid`);
+    exec(`sudo openvpn --config .github/client.ovpn --askpass .github/pkp.txt --daemon --log .github/openvpn.log --verb 0 --writepid .github/openvpn.pid`);
   } catch (error) {
     core.error(fs.readFileSync(".github/openvpn.log", "utf8"));
     tail.unwatch();
@@ -52,12 +52,14 @@ const run = (callback) => {
 
   tail.on("line", (data) => {
     core.info(data);
-    if (data.includes("Initialization Sequence Completed")) {
+    if (data.includes("Linux route add command failed")) {
       tail.unwatch();
       clearTimeout(timer);
-      const pid = fs.readFileSync(".github/openvpn.pid", "utf8").trim();
-      core.info(`VPN connected successfully. Daemon PID: ${pid}`);
-      callback(pid);
+      setTimeout(() => {
+        const pid = fs.readFileSync(".github/openvpn.pid", "utf8").trim();
+        core.info(`VPN connected successfully. Daemon PID: ${pid}`);
+        callback(pid);
+      }, 1000);
     }
   });
 
