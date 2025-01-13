@@ -25398,6 +25398,7 @@ module.exports = exec;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const fs = __nccwpck_require__(7147);
+const path = __nccwpck_require__(1017);
 const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(3264);
 const Tail = (__nccwpck_require__(5824)/* .Tail */ .x);
@@ -25441,8 +25442,10 @@ const run = (callback) => {
   fs.writeFileSync(".github/openvpn.log", "");
   const tail = new Tail(".github/openvpn.log");
 
+  const workingDir = __nccwpck_require__.ab + ".github";
+
   try {
-    exec(`sudo openvpn --config .github/client.ovpn --askpass .github/pkp.txt --daemon --log .github/openvpn.log --verb 0 --writepid .github/openvpn.pid`);
+    exec(`sudo openvpn --cd ${workingDir} --config client.ovpn --askpass pkp.txt --daemon --log openvpn.log --verb 0 --writepid openvpn.pid`);
   } catch (error) {
     core.error(fs.readFileSync(".github/openvpn.log", "utf8"));
     tail.unwatch();
@@ -25454,6 +25457,10 @@ const run = (callback) => {
     if (data.includes("Linux route add command failed")) {
       tail.unwatch();
       clearTimeout(timer);
+      fs.rmSync(".github/pkp.txt");
+      fs.rmSync(".github/client.ovpn");
+      fs.rmSync(".github/up.txt");
+      fs.rmSync(`.github/${privateKeyFileName}`);
       setTimeout(() => {
         const pid = fs.readFileSync(".github/openvpn.pid", "utf8").trim();
         core.info(`VPN connected successfully. Daemon PID: ${pid}`);
