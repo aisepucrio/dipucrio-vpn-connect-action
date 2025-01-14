@@ -1,6 +1,6 @@
 {
   "name": "dipucrio-vpn-connect-action",
-  "version": "1.5.0",
+  "version": "1.8.0",
   "description": "GitHub Action for connecting to DI PUC-Rio OpenVPN server",
   "keywords": [
     "github",
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/aisepucrio/dipucrio-vpn-connect-action.git"
   },
   "license": "MIT",
-  "author": "AISE PUC-Rio <aise@inf.puc-rio.br>",
+  "author": "AISE PUC-Rio <aise@aise.inf.puc-rio.br>",
   "main": "src/index.js",
   "scripts": {
     "build": "ncc build src/index.js",
